@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+
+<body>
+    <header id="header">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'blog:index' %}">
+                    <img src="{% static 'blog/icons/brandicon.png' %}" alt="logo" width="30" height="24"
+                        class="d-inline-block align-text-top">
+                    WORDS
+                </a>
+                <!-- menu icon -->
+                <div class="d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
+                    aria-controls="offcanvasRight">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white"
+                        class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+                    </svg>
+                </div>
+                <!-- nav bar item  -->
+                <div class="offcanvas offcanvas-end bg-dark" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasRightLabel">
+                            <form action="{% url 'blog:search' %}" method="GET" class="d-flex" role="search">
+                                {% csrf_token %}
+                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                                    name="search">
+                                <button class="btn btn-outline-light" type="submit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white"
+                                        class="bi bi-search" viewBox="0 0 16 16">
+                                        <path
+                                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" aria-current="page"
+                                    href="{% url 'blog:about' %}">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" href="{% url 'blog:contact' %}">Contact</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" href="{% url 'blog:logout' %}">Log out</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" href="{% url 'blog:profile' user.username %}">Profile</a>
+                            </li>
+                            {% if user.username == 'admin' %}
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" href="{% url 'blog:upload' %}">Create</a>
+                            </li>
+                            {% endif %}
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" href="{% url 'blog:signup' %}">Sign Up</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link link-body-emphasis" href="{% url 'blog:signin' %}">Log in</a>
+                            </li>
+                            {% endif %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Category
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Politics</a></li>
+                                    <li><a class="dropdown-item" href="#">Entertainment</a></li>
+                                    <li><a class="dropdown-item" href="#">Books</a></li>
+                                    <li><a class="dropdown-item" href="#">Movies</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">World News</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>      
+    </header>
+
+    <div class="container-fluid">
+        {% for article in featured_title %}
+        <div class="row p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary">
+            <div class="col-sm-8 col-lg-6 px-0">
+                <h1 class="display-4 fst-italic">{{ article.title }}</h1>
+                <p class="lead my-3">{{ article.summary }}</p>
+                <p class="lead mb-0"><a href="{% url 'blog:read' article.id article.title %}"
+                        class="text-body-emphasis fw-bold">Continue reading...</a></p>
+                <p>views: {{ article.clicks }} | comments: {{ article.comments }}</p>
+            </div>
+            <div class="col-sm-4">
+                <img src="{{ article.cover.url }}" style="width: 100%; height: auto;" alt="">
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="row">
+            <div class="col-md-8">
+                <div>
+                    <h6 class="text-center">Top Story</h6>
+                    <div class="container px-4 py-5">
+                        {% for article in top_story %}
+                        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+                            <div class="col-10 col-sm-8 col-lg-6">
+                                <img src="{{ article.cover.url }}" class="d-block mx-lg-auto img-fluid"
+                                    alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+                            </div>
+                            <div class="col-lg-6">
+                                <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">
+                                    <a class="text-decoration-none"
+                                        href="{% url 'blog:read' article.id article.title %}">{{ article.title }}</a>
+                                </h1>
+                                <p class="lead">
+                                    {{ article.summary }}
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="position-sticky" style="top: 2rem;">
+                    <form action="{% url 'blog:search' %}" method="GET" class="d-flex" role="search">
+                        {% csrf_token %}
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            name="search">
+                        <button class="btn btn-outline-dark" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="dark"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                 <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                            </svg>
+                        </button>
+                    </form>
+
+                    <div>
+                        <h6 class="text-center">Trending Articles</h6>
+                        <div class="p-4 mb-3 bg-body-tertiary rounded">
+                            <h4 class="fst-italic">About</h4>
+                            <p class="mb-0">Customize this section to tell your visitors a little bit about your
+                                publication, writers, content, or something else entirely. Totally up to you.</p>
+                        </div>
+                        <ul class="list-unstyled">
+                            {% if trending_articles %}
+                            {% for article in trending_articles %}
+                            <li>
+                                <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                                    href="{% url 'blog:read' article.id article.title %}">
+                                    <!-- <svg class="bd-placeholder-img" width="100%" height="96"
+                                        xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+                                        preserveAspectRatio="xMidYMid slice" focusable="false">
+                                        <rect width="100%" height="100%" fill="#777" />
+                                    </svg> -->
+                                    <img src="{{ article.cover.url }}" style="width: auto; height: 96px;" alt="">
+                                    <div class="col-lg-8">
+                                        <h6 class="mb-0">{{ article.title }}</h6>
+                                        <small class="text-body-secondary">{{ article.created_at }}</small>
+                                    </div>
+                                </a>
+                            </li>
+                            {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h6 class="text-center">More Featured Articles</h6>
+            <div class="row mb-2">
+
+                {% if featured %}
+                {% for article in featured %}
+                <div class="col-md-6">
+                    <div
+                        class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div class="col p-4 d-flex flex-column position-static">
+                            <strong class="d-inline-block mb-2 text-primary-emphasis">{{ article.category }}</strong>
+                            <h3 class="mb-0">{{ article.title }}</h3>
+                            <div class="mb-1 text-body-secondary">{{ article.created_at }}</div>
+                            <p class="card-text mb-auto">{{ article.summary }}</p>
+                            <a href="{% url 'blog:read' article.id article.title %}"
+                                class="icon-link gap-1 icon-link-hover stretched-link">
+                                Continue reading
+                                <!-- <svg class="bi">
+                                    <use xlink:href="#chevron-right" />
+                                </svg> -->
+                            </a>
+                        </div>
+                        <div class="col-auto d-none d-lg-block">
+                            <!-- <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                                role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
+                                focusable="false">
+                                <title>Placeholder</title>
+                                <rect width="100%" height="100%" fill="#55595c" /><text x="50%" y="50%" fill="#eceeef"
+                                    dy=".3em">Thumbnail</text>
+                            </svg> -->
+                            <img src="{{ article.cover.url }}" style="width: 200px; height: auto;" alt="">
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
+            <h1 class="fs-5"><a class="text-decoration-none" href="#header">Back to top</a></h1>
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="{% url 'blog:index' %}" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="{% url 'blog:category' %}" class="nav-link px-2 text-muted">Category</a>
+                </li>
+                <li class="nav-item"><a href="{% url 'blog:contact' %}" class="nav-link px-2 text-muted">Contact</a>
+                </li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="{% url 'blog:about' %}" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+            <p class="text-center text-muted">&copy; 2025 Company, Inc</p>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+
+<body class="align-items-center py-4 bg-body-tertiary">
+    <main class="form-signin w-100 m-auto" style="max-width:300px;">
+        <form action="{% url 'blog:signup' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if msg %}
+                <div class="alert alert-danger" role="alert">{{ msg }}</div>
+            {% endif %}
+            <h1 class="h3 mb-3 fw-normal">sign up here</h1>
+            {{ user }}
+            <input type="password" class="form-control" name="confirm" placeholder="Confirm Password" required>
+            <!-- <div class="form-floating">
+                <input type="text" class="form-control" id="floatingUsername" name="username" placeholder="User name" required>
+                <label for="floatingUsername">User name</label>
+            </div>
+
+            <div class="form-floating">
+                <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com" required>
+                <label for="floatingInput">Email address</label>
+            </div>
+            <div class="form-floating">
+                <input type="file" class="form-control" name="profile" id="floatingProfile" required>
+            </div>
+            
+            <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPassword" name="pwd" placeholder="Password" required>
+                <label for="floatingPassword">Password</label>
+            </div> -->
+
+            <!-- <div class="form-floating">
+                <input type="password" class="form-control" id="floatingPasswordConfirm" name="cpwd" placeholder="Confirm Password" required>
+                <label for="floatingPasswordConfirm">Confirm Password</label>
+                {% if pwd %}
+                <div class="alert alert-danger" role="alert">{{ pwd }}</div>
+                {% endif %}
+            </div>  -->
+
+            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+        </form>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abib</title>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+    <div class="container">
+        <header class="text-center bg-dark text-light p-3 mb-2">Just A Scientific Friend</header>
+
+        <!-- <form action="{% url 'abib:index' %}" method="POST" class="d-block">
+            {% csrf_token %}
+            <input class="form-control me-2" type="text" placeholder="ask" aria-label="Search" name="prompt">
+            <button class="btn btn-outline-success" type="submit">Send</button>
+        </form> -->
+
+        <form action="{% url 'abib:index' %}" method="POST" class="d-flex" role="search">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" placeholder="ASK" aria-label="Search" name="prompt">
+            <button class="btn btn-outline-success" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                </svg>
+            </button>
+        </form>
+        <h5 class="text-center">Response</h5>
+        {%if message %}
+        <div class="text-primary border shadow p-4">{{ message|safe }}</div>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>

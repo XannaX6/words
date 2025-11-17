@@ -1,0 +1,35 @@
+{% extends "blog/base.html" %}
+
+{% block title %} profile {% endblock %}
+
+{% block content %}
+
+<h6 class="text-center">Search Result</h6>
+<ul class="list-unstyled">
+    {% if pg_object %}
+    {% for article in pg_object %}
+    <li>
+        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+            href="{% url 'blog:read' article.id article.title %}">
+            <img src="{{ article.cover.url }}" style="width: auto; height: 96px;" alt="">
+            <div class="col-lg-8">
+                <h6 class="mb-0">{{ article.title }}</h6>
+                <small class="text-body-secondary">{{ article.created_at }}</small>
+            </div>
+        </a>
+    </li>
+    {% endfor %}
+    {% endif %}
+</ul>
+
+<div>
+    {% if pg_object.has_previous %}
+    <a href="?search={{ txt }}&page={{ pg_object.previous_page_number }}">previous</a>
+    {% endif %}
+</div>
+<div>
+    {% if pg_object.has_next %}
+    <a href="?search={{ txt }}&page={{ pg_object.next_page_number }}">next</a>
+    {% endif %}
+</div>
+{% endblock %}

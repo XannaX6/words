@@ -1,0 +1,76 @@
+{% extends "blog/base.html" %}
+
+{% block title %} profile {% endblock %}
+
+{% block content %}
+<form action="#" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    {{ article_form }}
+    <!-- <div class="row mb-5">
+            <label for="title" class="col-md-4 col-form-label text-md-end col-form-label">TITLE</label>
+            <input type="text" name="title" id="title" class="col-md-6 form-control" value="">
+        </div>
+
+        <div class="row mb-5">
+            <label for="cover" class="col-md-4 col-form-label">News Cover Image</label>
+            <input type="file" name="cover" id="cover" class="form-control" value="" accept="image/*">
+
+        </div>
+
+        <div class="row mb-5">
+            <label for="category" class="col-md-4 col-form-label">Select the category</label>
+            <select name="category" id="category" value="" class="form-control">
+                <option value="">None</option>
+                <option value="Politics">Politics</option>
+                <option value="Business">Business</option>
+                <option value="Health">Health</option>
+                <option value="Education">Education</option>
+                <option value="Movie">Movie</option>
+                <option value="Religion">Religion</option>
+                <option value="Sports">Sports</option>
+            </select>
+        </div>
+
+        <div class="row mb-5">
+            <textarea id="summernote" class="form-control" name="content" height="300px" value=""></textarea>
+        </div>
+
+        <div class="row mb-5">
+            <textarea class="form-control" name="summary" height="100px" placeholder="sumarize" value=""></textarea>
+        </div> -->
+
+    <button type="submit" class="btn btn-primary">UPLOAD</button>
+</form>
+{% endblock %}
+
+{% block jscript %}
+<script>
+    $(document).ready(function () {
+        $('#summernote').summernote({
+            placeholder: 'Text',
+            tabsize: 3,
+            height: 300,
+
+            callbacks: {
+                onImageUpload: function (files) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        let img = $('<img>').attr('src', e.target.result).addClass('responsive-image');
+                        $('#summernote').summernote('insertNode', img[0]);
+                    };
+                    reader.readAsDataURL(files[0]);
+                }, onMediaDelete: function (target) {
+                    $(target).remove();
+                }
+            },
+
+            toolbar: [
+                ['para', ['style',/* 'ul', 'ol',*/ 'paragraph']],
+                ['insert', ['link', 'picture', /*'video'*/]],
+                ['misc', ['undo', 'redo', /*'print', 'help', 'fullscreen'*/, 'codeview']],
+                ['style', ['bold', 'italic', /*'underline', 'clear'*/]],
+            ]
+        });
+    });
+</script>
+{% endblock %}

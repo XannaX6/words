@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    {% load static %}
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+<body class="align-items-center py-4 bg-body-tertiary">
+    <main class="form-signin w-100 m-auto" style="max-width:300px;">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger" role="alert">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if msg %}
+                <div class="alert alert-danger" role="alert">{{ msg }}</div>
+            {% endif %}
+        <form action="{% url 'blog:signin' %}" method="POST">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal">sign in</h1>
+            <div class="form-floating">
+                <input type="text" class="form-control" name="username" id="floatingInput" placeholder="name">
+                <label for="floatingInput">User Name</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+            </div>
+            <button class="btn btn-primary w-100 py-2" type="submit">Sign in</button>
+        </form>
+    </main>
+</body>
+</html>

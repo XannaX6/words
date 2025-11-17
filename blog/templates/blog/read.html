@@ -1,0 +1,77 @@
+{% extends "blog/base.html" %}
+
+{% block title %}
+{{ article_text.title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div>
+            <article>
+                {{ article_text.content|safe }}
+            </article>
+            <div>
+                <h6 class="text-center">Comments/Reactions</h6>
+                <form action="{% url 'blog:read' article_text.id article_text.title %}" method="POST" class="d-flex"
+                    role="search">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="text" placeholder="comment" aria-label="Search"
+                        name="comment">
+                    <button class="btn btn-outline-success" type="submit">Send</button>
+                </form>
+                {% if comment %}
+                <ol>
+                    {% for c in comment %}
+                    <li> {{ c.comment }} </li>
+                    {% endfor %}
+                </ol>
+                {% else %}
+                <p>No Reviews</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="position-sticky" style="top: 2rem;">
+            <div>
+                <h6 class="text-center">Related News</h6>
+                <ul class="list-unstyled">
+                    {% if articles %}
+                    {% for article in articles %}
+                    <li>
+                        <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top"
+                            href="{% url 'blog:read' article.id article.title %}">
+                            <img src="{{ article.cover.url }}" style="width: auto; height: 96px;" alt="">
+                            <div class="col-lg-8">
+                                <h6 class="mb-0">{{ article.title }}</h6>
+                                <small class="text-body-secondary">{{ article.created_at }}</small>
+                            </div>
+                        </a>
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block jscript %}
+<script>
+    var startTime = Date.now();
+    var articlepath = window.location.pathname;
+    var getid = articlepath.split('/')[3];
+
+    function logTimeSpent() {
+        let endTime = Date.now();
+        let timeSpent = Math.floor((endTime - startTime) / 1000);
+        navigator.sendBeacon(
+            "{% url 'blog:logtime' %}", JSON.stringify({ article_id: getid, time_spent: timeSpent }),
+        );
+    }
+
+    window.addEventListener('beforeunload', logTimeSpent);
+</script>
+{% endblock %}

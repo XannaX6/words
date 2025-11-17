@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+
+{% block title %} profile {% endblock %}
+
+{% block content %}
+{% if p %}
+<div>
+    <img width="200" height="200" src="{{ p.profile.url }}" alt="">
+</div>
+{% else %}
+<p>fill the form to create a profile</p>
+{% endif %}
+<form action="{% url 'blog:profile' user.username %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ profile }}
+    <button class="btn btn-primary w-100 py-2" type="submit">Update</button>
+</form>
+{% endblock %}
+
+{% block jscript %}
+
+{% endblock %}

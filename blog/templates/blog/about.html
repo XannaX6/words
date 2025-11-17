@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+
+{% block title %} About {% endblock %}
+
+{% block content %}
+<!-- <img src="{}" alt=""> -->
+    <!-- <img src="{{ img.profile.url }}" style="width:200px; height: auto;" alt=""> -->
+    <ul>
+        <li>{{ user.username }}</li>
+        <li>{{ user.email }}</li>
+        <!-- <li>{{ img.profile }}</li> -->
+        <!-- <li>{{ img.user_type }}</li> -->
+        <li>{{ a.viewed_time }}</li>
+        <!-- <li>{{ img.password }}</li> -->
+        <li>{{ a.created_at }}</li>
+    </ul>
+{% endblock %}
